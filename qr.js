@@ -281,7 +281,7 @@ class QR{
 
 	chooseDataMask(){
 		// TODO: make this smarter
-		return this.constructor.DATA_MASKS()[0]
+		return this.constructor.DATA_MASKS()[6]
 	}
 
 	applyDataMask(maskFunc){
@@ -481,16 +481,39 @@ class QR{
 				id: 0
 			},
 			1 : {
-				func: (x, y) => {return x%2==0},
+				func: (x, y) => {return y%2==0},
 				id: 1
 			},
 			2 : {
-				func: (x, y) => {return y%3==0},
+				func: (x, y) => {return x%3==0},
 				id: 2
 			},
 			3 : {
 				func: (x, y) => {return (x+y)%3==0},
 				id: 3
+			},
+			4 : {
+				func: (x, y) => {
+					let a = Math.floor(y/2)
+					let b = Math.floor(x/3)
+					return (a+b)%2==0
+				},
+				id: 4
+			},
+			5 : {
+				func: (x, y) => {return ((x*y)%2)+((x*y)%3)==0},
+				id: 5
+			},
+			6 : {
+				func: (x, y) => {
+					let xy = x*y
+					return ((xy%2)+(xy%3))%2==0
+				},
+				id: 6
+			},
+			7 : {
+				func: (x, y) => {return ((((x+y)%2)+((x*y)%3))%2)==0},
+				id: 7
 			}
 		}
 	}
