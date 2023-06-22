@@ -9,7 +9,10 @@ class ReedSolomon {
 		})
 		let stagecoderes = codewords_polynomial.map((c, i) => {
 			i = i + (stagegenres.length - codewords_polynomial.length)
-			let xor = GF256.antilog(stagegenres[i]) || 0
+			let xor = GF256.antilog(stagegenres[i])
+			if(c===undefined){
+				return GF256.log(xor)
+			}
 			c = GF256.log(GF256.antilog(c) ^ xor)
 			return c
 		})
@@ -19,7 +22,8 @@ class ReedSolomon {
 			let terms = stagegenres.slice(0,extra_digits)
 			stagecoderes = [...terms, ...stagecoderes]
 		}
-		stagecoderes = stagecoderes.filter(x=>x!==undefined)
+		// stagecoderes = stagecoderes.filter(x=>x!==undefined)
+		stagecoderes = stagecoderes.slice(0,-1)
 		return [stagegenres, stagecoderes]
 	}
 
@@ -49,7 +53,7 @@ class ReedSolomon {
 	}
 
 	static generator_polynomial(codewords){
-		console.log("CODEWORD LOOKUP "+codewords)
+		// console.log("CODEWORD LOOKUP "+codewords)
 		return ReedSolomon.GENERATOR_POLYNOMIAL_LOOKUP()[codewords]
 	}
 
@@ -70,7 +74,8 @@ class ReedSolomon {
 			15: [],
 			16: [],
 			17: [136, 163, 243, 39, 150, 99, 24, 147, 214, 206, 123, 239, 43, 78, 206, 139, 43, 0],
-			28: [123,9,37,242,119,212,195,42,87,245,43,21,201,232,27,205,147,195,190,110,180,108,234,224,104,200,223,168,0]
+			28: [123,9,37,242,119,212,195,42,87,245,43,21,201,232,27,205,147,195,190,110,180,108,234,224,104,200,223,168,0],
+			130: [225,140,201,246,32,134,13,213,74,205,107,7,170,118,155,221,205,190,169,228,67,74,57,170,123,56,2,77,111,50,186,46,181,208,166,35,147,77,214,36,71,142,237,204,70,196,145,1,233,14,92,198,153,141,85,60,54,1,58,100,7,71,43,193,18,76,144,190,166,65,127,91,175,244,168,45,196,123,6,177,197,245,80,229,244,166,166,171,75,106,161,252,46,35,231,245,247,160,4,250,6,251,183,20,71,251,189,107,120,8,127,159,226,118,4,146,206,40,218,181,152,121,116,126,52,44,68,153,234,44,0]
 		}
 	}
 }
