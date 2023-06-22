@@ -22,11 +22,16 @@ class QR{
 		this.addDarkModule()
 		this.reserveMetadataLocations()
 		this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
-		this.encoded_content = this.convertBitStreamToCodewords(
-			this.addTerminator(this.encode(this.input), this.codeword_capacity()*8))
-		this.encoded_padded_content = this.padCodewordToCapacity(this.encoded_content, this.codeword_capacity())
-		this.ec_codewords = this.generateECC()
-		this.final_message = this.interleaveData(this.encoded_padded_content, this.ec_codewords)
+		this.encoded_content = this.encode(this.input)
+		this.encoded_content = this.addTerminator(this.encoded_content, this.codeword_capacity())
+		this.codewords = this.convertBitStreamToCodewords(this.encoded_content)
+		this.encoded_padded_content = this.padCodewordToCapacity(this.codewords, this.codeword_capacity())
+		//Split into groups for EC generation
+		this.data_groups = this.splitDataGroups()
+		this.ec_codeword_groups = this.generateECC()
+		this.final_message = this.interleaveData(this.data_groups, this.ec_codeword_groups)
+		// console.log(JSON.stringify(this.final_message))
+		// console.log(this.final_message.length)
 		this.placeData(this.final_message)
 		this.mask = this.chooseDataMask()
 		this.applyDataMask(this.mask.func)
@@ -217,24 +222,61 @@ class QR{
 		return buf
 	}
 
-	calculateECCCount(){
-		let ver = this.version
-		let ec_level = "LMQH".indexOf(this.ec_level)
-		return this.constructor.EC_CHARACTERISTICS()[ver][ec_level].ec_codewords
+	splitDataGroups(){
+		let raw = Buffer.from(this.encoded_padded_content)
+		let chars = this.characteristics()
+		if(!chars.groups){
+			// All data is in one group, all ec in one group
+			return [raw]
+		}
+		let split = []
+		let offset = 0
+		for (let i = 0; i < chars.groups.length; i++) {
+			for(let j = 0; j < chars.groups[i].blocks; j++){
+				let size = chars.groups[i].data
+				let buf = Buffer.alloc(size)
+				raw.copy(buf, 0, offset, offset+size)
+				split.push(buf)
+				offset+=size
+			}
+		}
+		return split
 	}
 
 	generateECC(){
-		let codewords_polynomial = ReedSolomon.codewords_to_polynomial(this.encoded_padded_content)
-		let ecc_count = this.calculateECCCount()
-		let generator_polynomial = ReedSolomon.generator_polynomial(ecc_count)
-		let ecc = ReedSolomon.calculate_ecc(generator_polynomial, codewords_polynomial)
-		return ecc
+		let groups = []
+		for (let i = 0; i < this.data_groups.length; i++) {
+			let codewords = this.data_groups[i]
+			let codewords_polynomial = ReedSolomon.codewords_to_polynomial(codewords)
+			let ecc_count = this.characteristics().ec_codewords_per_block || this.characteristics().ec_codewords
+			let generator_polynomial = ReedSolomon.generator_polynomial(ecc_count)
+			let ecc = ReedSolomon.calculate_ecc(generator_polynomial, codewords_polynomial)
+			groups.push(ecc)
+		}
+		return groups
 	}
 
 	interleaveData(data_codewords, ec_codewords){
-		if(this.version < 40){
-			return [...data_codewords, ...ec_codewords]
+		// data_codewords = array of groups of codewords
+		// ec_codewords = array of groups of ec codewords
+		if(data_codewords.length === 1 && ec_codewords.length === 1){
+			return [...data_codewords[0], ...ec_codewords[0]]
 		}
+		let interleavedDataCodewords = []
+		for (let i = 0; i < data_codewords[data_codewords.length-1].length; i++) {
+			for(let j = 0; j < data_codewords.length; j++){
+				if(data_codewords[j][i]!==undefined){
+					interleavedDataCodewords.push(data_codewords[j][i])
+				}
+			}
+		}
+		let interleavedECCodewords = []
+		for (let i = 0; i < ec_codewords[0].length; i++) {
+			for(let j = 0; j < ec_codewords.length; j++){
+				interleavedECCodewords.push(ec_codewords[j][i])
+			}
+		}
+		return [...interleavedDataCodewords, ...interleavedECCodewords]
 	}
 
 	placeData(message){
@@ -244,8 +286,7 @@ class QR{
 			// console.log(`codeword ${i} = ${message[i]} - starts at ${location}(${this.dataLocationToXY(location)})`)
 			let codeword = message[i]
 			location = this.placeCodewordModules(codeword, location)
-			// console.log(this.toTerminalString())
-			// if(i>3){return}
+			// if(i%10===0){console.log(this.toTerminalString())}
 		}
 	}
 
@@ -385,7 +426,8 @@ class QR{
 	}
 
 	placeVersionInfoString(){
-		let vis = this.versionInfoString
+		let vis = this.versionInfoString.split("")
+		vis.reverse()
 		let m = this.measure-1
 		for (let i = 0; i < vis.length; i++) {
 			let v = vis[i]-0
@@ -400,9 +442,7 @@ class QR{
 
 	codeword_capacity(){
 		// return data bits available in current version
-		let ver = this.version
-		let ec_level = "LMQH".indexOf(this.ec_level)
-		return this.constructor.DATA_CHARACTERISTICS()[ver][ec_level].data_codewords
+		return this.characteristics().data_codewords
 	}
 
 	toTerminalString(){
@@ -437,6 +477,13 @@ class QR{
 		return out
 	}
 
+	characteristics(){
+		let ver = this.version
+		let ec_level = "LMQH".indexOf(this.ec_level)
+		// console.log(this.version, this.ec_level, "LMQH".indexOf(this.ec_level))
+		return this.constructor.CHARACTERISTICS()[ver][ec_level]
+	}
+
 	static DETERMINE_DATA_MODE(data) {
 		// Support numeric, alphanumeric, bytes, kanji
 		return "alphanumeric"
@@ -469,6 +516,8 @@ class QR{
 		let list = {
 			1: [],
 			2: [6,18],
+			5: [6,30],
+			6: [6,34],
 			7: [6, 22, 38]
 		}
 		return list[version]
@@ -505,6 +554,10 @@ class QR{
 
 	static DATA_MASKS(){
 		return {
+			"test" : {
+				func: (x, y) => {return 0},
+				id: 0
+			},
 			0 : {
 				func: (x, y) => {return ((x+y)%2)==0},
 				id: 0
@@ -631,135 +684,229 @@ class QR{
 		]
 	}
 
-	static DATA_CHARACTERISTICS(){
+	static CHARACTERISTICS(){
 		// Table 7 pg 41
-		return [
-			[], //no ver 0
-			[
-				{
-					type: "1L",
-					data_codewords: 19
-				},
-				{
-					type: "1M",
-					data_codewords: 16
-				},
-				{
-					type: "1Q",
-					data_codewords: 13
-				},
-				{
-					type: "1H",
-					data_codewords: 9
-				},
-			],
-			[
-				{
-					type: "2L",
-					data_codewords: 34,
-					remainder_bits: 7
-				},
-				{
-					type: "2M",
-					data_codewords: 28,
-					remainder_bits: 7
-				},
-				{
-					type: "2Q",
-					data_codewords: 22,
-					remainder_bits: 7
-				},
-				{
-					type: "2H",
-					data_codewords: 16,
-					remainder_bits: 7
-				},
-			],
-			[],
-			[],
-			[],
-			[],
-			[
-				{
-					type: "7L",
-					data_codewords: 156
-				},
-				{
-					type: "7M",
-					data_codewords: 124
-				},
-				{
-					type: "7Q",
-					data_codewords: 88
-				},
-				{
-					type: "7H",
-					data_codewords: 66
-				},
-			]
-		]
-	}
-
-	static EC_CHARACTERISTICS(){
 		// table 9 pg 46
 		return [
 			[], //no ver 0
 			[
 				{
 					type: "1L",
+					data_codewords: 19,
 					ec_codewords: 7
 				},
 				{
 					type: "1M",
+					data_codewords: 16,
 					ec_codewords: 10
 				},
 				{
 					type: "1Q",
+					data_codewords: 13,
 					ec_codewords: 13
 				},
 				{
 					type: "1H",
+					data_codewords: 9,
 					ec_codewords: 17
 				},
 			],
 			[
 				{
 					type: "2L",
-					ec_codewords: 10
+					data_codewords: 34,
+					ec_codewords: 10,
+					remainder_bits: 7
 				},
 				{
 					type: "2M",
-					ec_codewords: 16
+					data_codewords: 28,
+					ec_codewords: 16,
+					remainder_bits: 7
 				},
 				{
 					type: "2Q",
-					ec_codewords: 22
+					data_codewords: 22,
+					ec_codewords: 22,
+					remainder_bits: 7
 				},
 				{
 					type: "2H",
-					ec_codewords: 28
+					data_codewords: 16,
+					ec_codewords: 28,
+					remainder_bits: 7
 				},
 			],
 			[],
 			[],
-			[],
-			[],
+			[
+				{
+					type: "5L",
+					data_codewords: 108,
+					ec_codewords: 26,
+					remainder_bits: 7
+				},
+				{
+					type: "5M",
+					data_codewords: 86,
+					ec_codewords: 48,
+					ec_codewords_per_block: 24,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 2,
+							data: 43
+						}
+					]
+				},
+				{
+					type: "5Q",
+					data_codewords: 62,
+					ec_codewords: 72,
+					ec_codewords_per_block: 18,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 2,
+							data: 15
+						},
+						{
+							blocks: 2,
+							data: 16
+						}
+					]
+
+				},
+				{
+					type: "5H",
+					data_codewords: 46,
+					ec_codewords: 88,
+					ec_codewords_per_block: 22,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 2,
+							data: 11
+						},
+						{
+							blocks: 2,
+							data: 12
+						}
+					]
+				},
+			],
+			
+			[
+				{
+					type: "6L",
+					data_codewords: 136,
+					ec_codewords: 36,
+					ec_codewords_per_block: 18,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 2,
+							data: 68
+						}
+					]
+				},
+				{
+					type: "6M",
+					data_codewords: 108,
+					ec_codewords: 64,
+					ec_codewords_per_block: 16,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 4,
+							data: 27
+						}
+					]
+				},
+				{
+					type: "6Q",
+					data_codewords: 76,
+					ec_codewords: 96,
+					ec_codewords_per_block: 24,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 4,
+							data: 19
+						}
+					]
+
+				},
+				{
+					type: "6H",
+					data_codewords: 60,
+					ec_codewords: 112,
+					ec_codewords_per_block: 28,
+					remainder_bits: 7,
+					groups: [
+						{
+							blocks: 4,
+							data: 15
+						}
+					]
+				},
+			],
 			[
 				{
 					type: "7L",
-					ec_codewords: 40
+					data_codewords: 156,
+					ec_codewords: 40,
+					ec_codewords_per_block: 20,
+					groups: [
+						{
+							blocks: 2,
+							data: 78
+						}
+					]
 				},
 				{
 					type: "7M",
-					ec_codewords: 72
+					data_codewords: 124,
+					ec_codewords: 72,
+					ec_codewords_per_block: 18,
+					groups: [
+						{
+							blocks: 4,
+							data: 31
+						}
+					]
 				},
 				{
 					type: "7Q",
-					ec_codewords: 108
+					data_codewords: 88,
+					ec_codewords: 108,
+					ec_codewords_per_block: 18,
+					groups: [
+						{
+							blocks: 2,
+							data: 14
+						},
+						{
+							blocks: 4,
+							data: 15
+						}
+					]
 				},
 				{
 					type: "7H",
-					ec_codewords: 130
+					data_codewords: 66,
+					ec_codewords: 130,
+					ec_codewords_per_block: 26,
+					groups: [
+						{
+							blocks: 4,
+							data: 13
+						},
+						{
+							blocks: 1,
+							data: 14
+						}
+					]
 				},
 			]
 		]
