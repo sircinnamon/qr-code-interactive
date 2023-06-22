@@ -9,3 +9,4 @@ Basically I wanted to learn what goes into QR codes (turns out it's mostly math)
 - Determine version + EC level dynamically, if not provided
 - Support MiniQR
 - Support all EC levels
+- Fix ReedSolomon handling of undefined

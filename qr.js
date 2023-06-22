@@ -24,7 +24,7 @@ class QR{
 		this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
 		this.encoded_content = this.convertBitStreamToCodewords(
 			this.addTerminator(this.encode(this.input), this.codeword_capacity()*8))
-		this.encoded_padded_content = this.padCodewordToCapacity(this.encoded_content, 9)
+		this.encoded_padded_content = this.padCodewordToCapacity(this.encoded_content, this.codeword_capacity())
 		this.ec_codewords = this.generateECC()
 		this.final_message = this.interleaveData(this.encoded_padded_content, this.ec_codewords)
 		this.placeData(this.final_message)
@@ -32,6 +32,10 @@ class QR{
 		this.applyDataMask(this.mask.func)
 		this.formatString = this.generateFormatString()
 		this.placeFormatString()
+		if(this.version >= 7){
+			this.versionInfoString = this.lookupVersionInfoString()
+			this.placeVersionInfoString()
+		}
 	}
 
 	addFinderPatterns(){
@@ -169,6 +173,11 @@ class QR{
 		}
 		if(BitArr.bitLength(bitSeq) > symbolCapacity){
 			bitSeq = BitArr.bitSlice(bitSeq, 0, symbolCapacity)
+		}
+		if(BitArr.bitLength(bitSeq) < symbolCapacity){
+			while(BitArr.bitLength(bitSeq) % 8 != 0){
+				bitSeq = BitArr.concat(bitSeq, [BitArr.partial(1, 0)])
+			}
 		}
 		return bitSeq
 	}
@@ -371,6 +380,24 @@ class QR{
 		}
 	}
 
+	lookupVersionInfoString(){
+		return this.constructor.VERSION_INFO_STRINGS()[this.version]
+	}
+
+	placeVersionInfoString(){
+		let vis = this.versionInfoString
+		let m = this.measure-1
+		for (let i = 0; i < vis.length; i++) {
+			let v = vis[i]-0
+			let x1 = Math.floor(i/3)
+			let y1 = (m-10) + i%3
+			let x2 = (m-10) + i%3
+			let y2 = Math.floor(i/3)
+			this.modules.set(x1,y1,v)
+			this.modules.set(x2,y2,v)
+		}
+	}
+
 	codeword_capacity(){
 		// return data bits available in current version
 		let ver = this.version
@@ -438,9 +465,11 @@ class QR{
 	}
 
 	static ALIGNMENT_PATTERN_LOCATIONS(version){
+		// Annex E Table E.1 pf 91
 		let list = {
 			1: [],
-			2: [6,18]
+			2: [6,18],
+			7: [6, 22, 38]
 		}
 		return list[version]
 	}
@@ -555,6 +584,53 @@ class QR{
 		}
 	}
 
+	static VERSION_INFO_STRINGS(){
+		// No version info block on versions 1-6
+		return [
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"000111110010010100",
+			"001000010110111100",
+			"001001101010011001",
+			"001010010011010011",
+			"001011101111110110",
+			"001100011101100010",
+			"001101100001000111",
+			"001110011000001101",
+			"001111100100101000",
+			"010000101101111000",
+			"010001010001011101",
+			"010010101000010111",
+			"010011010100110010",
+			"010100100110100110",
+			"010101011010000011",
+			"010110100011001001",
+			"010111011111101100",
+			"011000111011000100",
+			"011001000111100001",
+			"011010111110101011",
+			"011011000010001110",
+			"011100110000011010",
+			"011101001100111111",
+			"011110110101110101",
+			"011111001001010000",
+			"100000100111010101",
+			"100001011011110000",
+			"100010100010111010",
+			"100011011110011111",
+			"100100101100001011",
+			"100101010000101110",
+			"100110101001100100",
+			"100111010101000001",
+			"101000110001101001"
+		]
+	}
+
 	static DATA_CHARACTERISTICS(){
 		// Table 7 pg 41
 		return [
@@ -580,19 +656,45 @@ class QR{
 			[
 				{
 					type: "2L",
-					data_codewords: 34
+					data_codewords: 34,
+					remainder_bits: 7
 				},
 				{
 					type: "2M",
-					data_codewords: 28
+					data_codewords: 28,
+					remainder_bits: 7
 				},
 				{
 					type: "2Q",
-					data_codewords: 22
+					data_codewords: 22,
+					remainder_bits: 7
 				},
 				{
 					type: "2H",
-					data_codewords: 16
+					data_codewords: 16,
+					remainder_bits: 7
+				},
+			],
+			[],
+			[],
+			[],
+			[],
+			[
+				{
+					type: "7L",
+					data_codewords: 156
+				},
+				{
+					type: "7M",
+					data_codewords: 124
+				},
+				{
+					type: "7Q",
+					data_codewords: 88
+				},
+				{
+					type: "7H",
+					data_codewords: 66
 				},
 			]
 		]
@@ -636,6 +738,28 @@ class QR{
 				{
 					type: "2H",
 					ec_codewords: 28
+				},
+			],
+			[],
+			[],
+			[],
+			[],
+			[
+				{
+					type: "7L",
+					ec_codewords: 40
+				},
+				{
+					type: "7M",
+					ec_codewords: 72
+				},
+				{
+					type: "7Q",
+					ec_codewords: 108
+				},
+				{
+					type: "7H",
+					ec_codewords: 130
 				},
 			]
 		]
