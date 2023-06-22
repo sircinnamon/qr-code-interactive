@@ -4,7 +4,7 @@ let QR = require("./qr.js")
 
 let qr_test = new QR("TEST", version=1)
 let qr_hello = new QR("HELLO", version=1)
-let qr_nums = new QR("123456789", version=1)
+let qr_nums = new QR("123456789", version=2)
 console.log(qr_test.toTerminalString())
 console.log(qr_hello.toTerminalString())
 console.log(qr_nums.toTerminalString())

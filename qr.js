@@ -3,8 +3,9 @@ let TwoDArray = require("./TwoDArray")
 let ReedSolomon = require("./reedSolomon")
 
 class QR{
-	constructor(input, version = 1){
+	constructor(input, version = 1, ec_level="H"){
 		this.version = version
+		this.ec_level = ec_level
 		this.measure = version * 4 + 17
 		this.modules = new TwoDArray(this.measure, this.measure, 0)
 		this.locked_modules = new TwoDArray(this.measure, this.measure, 0)
@@ -21,7 +22,6 @@ class QR{
 		this.addDarkModule()
 		this.reserveMetadataLocations()
 		this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
-		this.ec_level = "H"
 		this.encoded_content = this.convertBitStreamToCodewords(
 			this.addTerminator(this.encode(this.input), this.codeword_capacity()*8))
 		this.encoded_padded_content = this.padCodewordToCapacity(this.encoded_content, 9)
@@ -217,7 +217,7 @@ class QR{
 	generateECC(){
 		let codewords_polynomial = ReedSolomon.codewords_to_polynomial(this.encoded_padded_content)
 		let ecc_count = this.calculateECCCount()
-		let generator_polynomial = ReedSolomon.generator_polynomial(17) // Ten for a 1-M code
+		let generator_polynomial = ReedSolomon.generator_polynomial(ecc_count)
 		let ecc = ReedSolomon.calculate_ecc(generator_polynomial, codewords_polynomial)
 		return ecc
 	}
@@ -375,7 +375,7 @@ class QR{
 		// return data bits available in current version
 		let ver = this.version
 		let ec_level = "LMQH".indexOf(this.ec_level)
-		return this.constructor.DATA_CHARACTERISTICS()[ver][ec_level].ec_codewords
+		return this.constructor.DATA_CHARACTERISTICS()[ver][ec_level].data_codewords
 	}
 
 	toTerminalString(){
@@ -556,6 +556,7 @@ class QR{
 	}
 
 	static DATA_CHARACTERISTICS(){
+		// Table 7 pg 41
 		return [
 			[], //no ver 0
 			[
@@ -565,21 +566,40 @@ class QR{
 				},
 				{
 					type: "1M",
-					ec_codewords: 16
+					data_codewords: 16
 				},
 				{
 					type: "1Q",
-					ec_codewords: 13
+					data_codewords: 13
 				},
 				{
 					type: "1H",
-					ec_codewords: 9
+					data_codewords: 9
+				},
+			],
+			[
+				{
+					type: "2L",
+					data_codewords: 34
+				},
+				{
+					type: "2M",
+					data_codewords: 28
+				},
+				{
+					type: "2Q",
+					data_codewords: 22
+				},
+				{
+					type: "2H",
+					data_codewords: 16
 				},
 			]
 		]
 	}
 
 	static EC_CHARACTERISTICS(){
+		// table 9 pg 46
 		return [
 			[], //no ver 0
 			[
@@ -598,6 +618,24 @@ class QR{
 				{
 					type: "1H",
 					ec_codewords: 17
+				},
+			],
+			[
+				{
+					type: "2L",
+					ec_codewords: 10
+				},
+				{
+					type: "2M",
+					ec_codewords: 16
+				},
+				{
+					type: "2Q",
+					ec_codewords: 22
+				},
+				{
+					type: "2H",
+					ec_codewords: 28
 				},
 			]
 		]

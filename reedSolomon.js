@@ -49,11 +49,12 @@ class ReedSolomon {
 	}
 
 	static generator_polynomial(codewords){
-		// console.log("CODEWORD LOOKUP "+codewords)
+		console.log("CODEWORD LOOKUP "+codewords)
 		return ReedSolomon.GENERATOR_POLYNOMIAL_LOOKUP()[codewords]
 	}
 
 	static GENERATOR_POLYNOMIAL_LOOKUP(){
+		// Annex A Table A.1 pg 81 (https://www.thonky.com/qr-code-tutorial/generator-polynomial-tool)
 		// index = number of error correction codewords
 		// each element e = 1 term of the polynomial
 		// index i = power of x, e[i] = power of alpha α (2)
@@ -69,7 +70,7 @@ class ReedSolomon {
 			15: [],
 			16: [],
 			17: [136, 163, 243, 39, 150, 99, 24, 147, 214, 206, 123, 239, 43, 78, 206, 139, 43, 0],
-			"format": [0, 0, 0, undefined, 0, 0, undefined, undefined, 0, undefined, 0]
+			28: [123,9,37,242,119,212,195,42,87,245,43,21,201,232,27,205,147,195,190,110,180,108,234,224,104,200,223,168,0]
 		}
 	}
 }
