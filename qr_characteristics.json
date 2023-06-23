@@ -1,0 +1,214 @@
+{
+	"characteristics": [
+		[],
+		[
+			{
+				"type": "1L",
+				"data_codewords": 19,
+				"ec_codewords_per_block": 7
+			},
+			{
+				"type": "1M",
+				"data_codewords": 16,
+				"ec_codewords_per_block": 10
+			},
+			{
+				"type": "1Q",
+				"data_codewords": 13,
+				"ec_codewords_per_block": 13
+			},
+			{
+				"type": "1H",
+				"data_codewords": 9,
+				"ec_codewords_per_block": 17
+			}
+		],
+		[
+			{
+				"type": "2L",
+				"data_codewords": 34,
+				"ec_codewords_per_block": 10,
+				"remainder_bits": 7
+			},
+			{
+				"type": "2M",
+				"data_codewords": 28,
+				"ec_codewords_per_block": 16,
+				"remainder_bits": 7
+			},
+			{
+				"type": "2Q",
+				"data_codewords": 22,
+				"ec_codewords_per_block": 22,
+				"remainder_bits": 7
+			},
+			{
+				"type": "2H",
+				"data_codewords": 16,
+				"ec_codewords_per_block": 28,
+				"remainder_bits": 7
+			}
+		],
+		[],
+		[],
+		[
+			{
+				"type": "5L",
+				"data_codewords": 108,
+				"ec_codewords_per_block": 26,
+				"remainder_bits": 7
+			},
+			{
+				"type": "5M",
+				"data_codewords": 86,
+				"ec_codewords_per_block": 24,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 43
+					}
+				]
+			},
+			{
+				"type": "5Q",
+				"data_codewords": 62,
+				"ec_codewords_per_block": 18,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 15
+					},
+					{
+						"blocks": 2,
+						"data": 16
+					}
+				]
+
+			},
+			{
+				"type": "5H",
+				"data_codewords": 46,
+				"ec_codewords_per_block": 22,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 11
+					},
+					{
+						"blocks": 2,
+						"data": 12
+					}
+				]
+			}
+		],
+		
+		[
+			{
+				"type": "6L",
+				"data_codewords": 136,
+				"ec_codewords_per_block": 18,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 68
+					}
+				]
+			},
+			{
+				"type": "6M",
+				"data_codewords": 108,
+				"ec_codewords_per_block": 16,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 27
+					}
+				]
+			},
+			{
+				"type": "6Q",
+				"data_codewords": 76,
+				"ec_codewords_per_block": 24,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 19
+					}
+				]
+
+			},
+			{
+				"type": "6H",
+				"data_codewords": 60,
+				"ec_codewords_per_block": 28,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 15
+					}
+				]
+			}
+		],
+		[
+			{
+				"type": "7L",
+				"data_codewords": 156,
+				"ec_codewords_per_block": 20,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 78
+					}
+				]
+			},
+			{
+				"type": "7M",
+				"data_codewords": 124,
+				"ec_codewords_per_block": 18,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 31
+					}
+				]
+			},
+			{
+				"type": "7Q",
+				"data_codewords": 88,
+				"ec_codewords_per_block": 18,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 14
+					},
+					{
+						"blocks": 4,
+						"data": 15
+					}
+				]
+			},
+			{
+				"type": "7H",
+				"data_codewords": 66,
+				"ec_codewords_per_block": 26,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 13
+					},
+					{
+						"blocks": 1,
+						"data": 14
+					}
+				]
+			}
+		]
+	]
+}
