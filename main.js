@@ -26,6 +26,16 @@ console.log("============= VER 7 =============")
 let qr_long = new QR("THIS IS A LARGER QR CODE WITH HIGH CAPACITY AND VER INFO BLOCK. 66 CODEWORDS CAN DO 93 CHARS.", version=7)
 console.log(qr_long.toTerminalString())
 
+console.log("============= EVERY VERSION/EC =============")
+let text = "A SHORT GENERIC TEXT"
+for (let i = 1; i <= 40; i++) {
+	for (let j = 0; j < 4; j++) {
+		let ec = "LMQH"[j]
+		let ver = i
+		let qr = new QR(text, version=ver, ec_level=ec)
+	}
+}
+
 // let bitSeq = qr.alphanumericEncode("AC-42")
 // bitSeq = qr.addTerminator(bitSeq, 152)
 // console.log(bitArray.toString(bitSeq))

@@ -10,3 +10,4 @@ Basically I wanted to learn what goes into QR codes (turns out it's mostly math)
 - Support MiniQR
 - Support all EC levels
 - Fix ReedSolomon handling of undefined
+- Render to SVG
