@@ -49,8 +49,88 @@
 				"remainder_bits": 7
 			}
 		],
-		[],
-		[],
+		[
+			{
+				"type":"3L",
+				"data_codewords":55,
+				"ec_codewords_per_block":15,
+				"remainder_bits": 7
+			},
+			{
+				"type":"3M",
+				"data_codewords":44,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 7
+			},
+			{
+				"type":"3Q",
+				"data_codewords":34,
+				"ec_codewords_per_block":18,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 17
+					}
+				]
+			},
+			{
+				"type":"3H",
+				"data_codewords":26,
+				"ec_codewords_per_block":22,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 13
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"4L",
+				"data_codewords":80,
+				"ec_codewords_per_block":20,
+				"remainder_bits": 7
+			},
+			{
+				"type":"4M",
+				"data_codewords":64,
+				"ec_codewords_per_block":18,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 32
+					}
+				]
+			},
+			{
+				"type":"4Q",
+				"data_codewords":48,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 24
+					}
+				]
+			},
+			{
+				"type":"4H",
+				"data_codewords":36,
+				"ec_codewords_per_block":16,
+				"remainder_bits": 7,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 9
+					}
+				]
+			}
+		],
 		[
 			{
 				"type": "5L",
@@ -103,8 +183,7 @@
 					}
 				]
 			}
-		],
-		
+		],	
 		[
 			{
 				"type": "6L",
@@ -206,6 +285,2104 @@
 					{
 						"blocks": 1,
 						"data": 14
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"8L",
+				"data_codewords":194,
+				"ec_codewords_per_block":24,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 97
+					}
+				]
+			},
+			{
+				"type":"8M",
+				"data_codewords":154,
+				"ec_codewords_per_block":22,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 38
+					},
+					{
+						"blocks": 2,
+						"data": 39
+					}
+				]
+			},
+			{
+				"type":"8Q",
+				"data_codewords":110,
+				"ec_codewords_per_block":22,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 18
+					},
+					{
+						"blocks": 2,
+						"data": 19
+					}
+				]
+			},
+			{
+				"type":"8H",
+				"data_codewords":86,
+				"ec_codewords_per_block":26,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 14
+					},
+					{
+						"blocks": 2,
+						"data": 15
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"9L",
+				"data_codewords":232,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 116
+					}
+				]
+			},
+			{
+				"type":"9M",
+				"data_codewords":182,
+				"ec_codewords_per_block":22,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 36
+					},
+					{
+						"blocks": 2,
+						"data": 37
+					}
+				]
+			},
+			{
+				"type":"9Q",
+				"data_codewords":132,
+				"ec_codewords_per_block":20,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 16
+					},
+					{
+						"blocks": 4,
+						"data": 17
+					}
+				]
+			},
+			{
+				"type":"9H",
+				"data_codewords":100,
+				"ec_codewords_per_block":24,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 12
+					},
+					{
+						"blocks": 4,
+						"data": 13
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"10L",
+				"data_codewords":274,
+				"ec_codewords_per_block":18,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 68
+					},
+					{
+						"blocks": 2,
+						"data": 69
+					}
+				]
+			},
+			{
+				"type":"10M",
+				"data_codewords":216,
+				"ec_codewords_per_block":26,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 43
+					},
+					{
+						"blocks": 1,
+						"data": 44
+					}
+				]
+			},
+			{
+				"type":"10Q",
+				"data_codewords":154,
+				"ec_codewords_per_block":24,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 19
+					},
+					{
+						"blocks": 2,
+						"data": 20
+					}
+				]
+			},
+			{
+				"type":"10H",
+				"data_codewords":122,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 15
+					},
+					{
+						"blocks": 2,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"11L",
+				"data_codewords":324,
+				"ec_codewords_per_block":20,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 81
+					}
+				]
+			},
+			{
+				"type":"11M",
+				"data_codewords":254,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 1,
+						"data": 50
+					},
+					{
+						"blocks": 4,
+						"data": 51
+					}
+				]
+			},
+			{
+				"type":"11Q",
+				"data_codewords":180,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 22
+					},
+					{
+						"blocks": 4,
+						"data": 23
+					}
+				]
+			},
+			{
+				"type":"11H",
+				"data_codewords":140,
+				"ec_codewords_per_block":24,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 12
+					},
+					{
+						"blocks": 8,
+						"data": 13
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"12L",
+				"data_codewords":370,
+				"ec_codewords_per_block":24,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 92
+					},
+					{
+						"blocks": 2,
+						"data": 93
+					}
+				]
+			},
+			{
+				"type":"12M",
+				"data_codewords":290,
+				"ec_codewords_per_block":22,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 35
+					},
+					{
+						"blocks": 2,
+						"data": 37
+					}
+				]
+			},
+			{
+				"type":"12Q",
+				"data_codewords":206,
+				"ec_codewords_per_block":26,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 20
+					},
+					{
+						"blocks": 6,
+						"data": 21
+					}
+				]
+			},
+			{
+				"type":"12H",
+				"data_codewords":158,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 7,
+						"data": 14
+					},
+					{
+						"blocks": 4,
+						"data": 5
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"13L",
+				"data_codewords":428,
+				"ec_codewords_per_block":26,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 107
+					}
+				]
+			},
+			{
+				"type":"13M",
+				"data_codewords":334,
+				"ec_codewords_per_block":22,
+				"groups": [
+					{
+						"blocks": 8,
+						"data": 37
+					},
+					{
+						"blocks": 1,
+						"data": 38
+					}
+				]
+			},
+			{
+				"type":"13Q",
+				"data_codewords":244,
+				"ec_codewords_per_block":24,
+				"groups": [
+					{
+						"blocks": 8,
+						"data": 20
+					},
+					{
+						"blocks": 4,
+						"data": 21
+					}
+				]
+			},
+			{
+				"type":"13H",
+				"data_codewords":180,
+				"ec_codewords_per_block":22,
+				"groups": [
+					{
+						"blocks": 12,
+						"data": 11
+					},
+					{
+						"blocks": 4,
+						"data": 12
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"14L",
+				"data_codewords":461,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 115
+					},
+					{
+						"blocks": 1,
+						"data": 116
+					}
+				]
+			},
+			{
+				"type":"14M",
+				"data_codewords":365,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 40
+					},
+					{
+						"blocks": 5,
+						"data": 41
+					}
+				]
+			},
+			{
+				"type":"14Q",
+				"data_codewords":261,
+				"ec_codewords_per_block":20,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 16
+					},
+					{
+						"blocks": 5,
+						"data": 17
+					}
+				]
+			},
+			{
+				"type":"14H",
+				"data_codewords":197,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 12
+					},
+					{
+						"blocks": 5,
+						"data": 13
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"15L",
+				"data_codewords":523,
+				"ec_codewords_per_block":22,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 5,
+						"data": 87
+					},
+					{
+						"blocks": 1,
+						"data": 88
+					}
+				]
+			},
+			{
+				"type":"15M",
+				"data_codewords":415,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 5,
+						"data": 41
+					},
+					{
+						"blocks": 5,
+						"data": 42
+					}
+				]
+			},
+			{
+				"type":"15Q",
+				"data_codewords":295,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 5,
+						"data": 24
+					},
+					{
+						"blocks": 7,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"15H",
+				"data_codewords":223,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 12
+					},
+					{
+						"blocks": 7,
+						"data": 13
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"16L",
+				"data_codewords":589,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 5,
+						"data": 98
+					},
+					{
+						"blocks": 1,
+						"data": 99
+					}
+				]
+			},
+			{
+				"type":"16M",
+				"data_codewords":453,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 7,
+						"data": 45
+					},
+					{
+						"blocks": 3,
+						"data": 46
+					}
+				]
+			},
+			{
+				"type":"16Q",
+				"data_codewords":325,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 15,
+						"data": 19
+					},
+					{
+						"blocks": 2,
+						"data": 20
+					}
+				]
+			},
+			{
+				"type":"16H",
+				"data_codewords":253,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 15
+					},
+					{
+						"blocks": 13,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"17L",
+				"data_codewords":647,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 1,
+						"data": 107
+					},
+					{
+						"blocks": 5,
+						"data": 108
+					}
+				]
+			},
+			{
+				"type":"17M",
+				"data_codewords":507,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 10,
+						"data": 46
+					},
+					{
+						"blocks": 1,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"17Q",
+				"data_codewords":367,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 1,
+						"data": 22
+					},
+					{
+						"blocks": 15,
+						"data": 23
+					}
+				]
+			},
+			{
+				"type":"17H",
+				"data_codewords":283,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 14
+					},
+					{
+						"blocks": 17,
+						"data": 15
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"18L",
+				"data_codewords":721,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 5,
+						"data": 120
+					},
+					{
+						"blocks": 1,
+						"data": 121
+					}
+				]
+			},
+			{
+				"type":"18M",
+				"data_codewords":563,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 9,
+						"data": 43
+					},
+					{
+						"blocks": 4,
+						"data": 44
+					}
+				]
+			},
+			{
+				"type":"18Q",
+				"data_codewords":397,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 22
+					},
+					{
+						"blocks": 1,
+						"data": 23
+					}
+				]
+			},
+			{
+				"type":"18H",
+				"data_codewords":313,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 14
+					},
+					{
+						"blocks": 19,
+						"data": 15
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"19L",
+				"data_codewords":795,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 113
+					},
+					{
+						"blocks": 4,
+						"data": 114
+					}
+				]
+			},
+			{
+				"type":"19M",
+				"data_codewords":627,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 44
+					},
+					{
+						"blocks": 11,
+						"data": 45
+					}
+				]
+			},
+			{
+				"type":"19Q",
+				"data_codewords":445,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 21
+					},
+					{
+						"blocks": 4,
+						"data": 22
+					}
+				]
+			},
+			{
+				"type":"19H",
+				"data_codewords":341,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 9,
+						"data": 13
+					},
+					{
+						"blocks": 16,
+						"data": 14
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"20L",
+				"data_codewords":861,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 107
+					},
+					{
+						"blocks": 5,
+						"data": 108
+					}
+				]
+			},
+			{
+				"type":"20M",
+				"data_codewords":669,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 41
+					},
+					{
+						"blocks": 13,
+						"data": 42
+					}
+				]
+			},
+			{
+				"type":"20Q",
+				"data_codewords":485,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 15,
+						"data": 24
+					},
+					{
+						"blocks": 5,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"20H",
+				"data_codewords":385,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 15,
+						"data": 15
+					},
+					{
+						"blocks": 10,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"21L",
+				"data_codewords":932,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 116
+					},
+					{
+						"blocks": 4,
+						"data": 117
+					}
+				]
+			},
+			{
+				"type":"21M",
+				"data_codewords":714,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 42
+					}
+				]
+			},
+			{
+				"type":"21Q",
+				"data_codewords":512,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 22
+					},
+					{
+						"blocks": 6,
+						"data": 23
+					}
+				]
+			},
+			{
+				"type":"21H",
+				"data_codewords":406,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 19,
+						"data": 16
+					},
+					{
+						"blocks": 6,
+						"data": 17
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"22L",
+				"data_codewords":1006,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 111
+					},
+					{
+						"blocks": 7,
+						"data": 112
+					}
+				]
+			},
+			{
+				"type":"22M",
+				"data_codewords":782,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 46
+					}
+				]
+			},
+			{
+				"type":"22Q",
+				"data_codewords":568,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 7,
+						"data": 24
+					},
+					{
+						"blocks": 16,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"22H",
+				"data_codewords":442,
+				"ec_codewords_per_block":24,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 34,
+						"data": 13
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"23L",
+				"data_codewords":1094,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 121
+					},
+					{
+						"blocks": 5,
+						"data": 122
+					}
+				]
+			},
+			{
+				"type":"23M",
+				"data_codewords":860,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 47
+					},
+					{
+						"blocks": 14,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"23Q",
+				"data_codewords":614,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 24
+					},
+					{
+						"blocks": 14,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"23H",
+				"data_codewords":464,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 16,
+						"data": 15
+					},
+					{
+						"blocks": 14,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"24L",
+				"data_codewords":1174,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 117
+					},
+					{
+						"blocks": 4,
+						"data": 118
+					}
+				]
+			},
+			{
+				"type":"24M",
+				"data_codewords":914,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 45
+					},
+					{
+						"blocks": 14,
+						"data": 46
+					}
+				]
+			},
+			{
+				"type":"24Q",
+				"data_codewords":664,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 24
+					},
+					{
+						"blocks": 16,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"24H",
+				"data_codewords":514,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 30,
+						"data": 16
+					},
+					{
+						"blocks": 2,
+						"data": 17
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"25L",
+				"data_codewords":1276,
+				"ec_codewords_per_block":26,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 8,
+						"data": 106
+					},
+					{
+						"blocks": 4,
+						"data": 107
+					}
+				]
+			},
+			{
+				"type":"25M",
+				"data_codewords":1000,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 8,
+						"data": 47
+					},
+					{
+						"blocks": 13,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"25Q",
+				"data_codewords":718,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 7,
+						"data": 24
+					},
+					{
+						"blocks": 22,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"25H",
+				"data_codewords":538,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 22,
+						"data": 15
+					},
+					{
+						"blocks": 13,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"26L",
+				"data_codewords":1370,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 10,
+						"data": 114
+					},
+					{
+						"blocks": 2,
+						"data": 115
+					}
+				]
+			},
+			{
+				"type":"26M",
+				"data_codewords":1062,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 19,
+						"data": 46
+					},
+					{
+						"blocks": 4,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"26Q",
+				"data_codewords":754,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 28,
+						"data": 22
+					},
+					{
+						"blocks": 6,
+						"data": 23
+					}
+				]
+			},
+			{
+				"type":"26H",
+				"data_codewords":596,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 33,
+						"data": 16
+					},
+					{
+						"blocks": 4,
+						"data": 17
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"27L",
+				"data_codewords":1468,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 8,
+						"data": 122
+					},
+					{
+						"blocks": 4,
+						"data": 123
+					}
+				]
+			},
+			{
+				"type":"27M",
+				"data_codewords":1128,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 22,
+						"data": 45
+					},
+					{
+						"blocks": 3,
+						"data": 46
+					}
+				]
+			},
+			{
+				"type":"27Q",
+				"data_codewords":808,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 8,
+						"data": 23
+					},
+					{
+						"blocks": 26,
+						"data": 24
+					}
+				]
+			},
+			{
+				"type":"27H",
+				"data_codewords":628,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 4,
+				"groups": [
+					{
+						"blocks": 12,
+						"data": 15
+					},
+					{
+						"blocks": 28,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"28L",
+				"data_codewords":1531,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 117
+					},
+					{
+						"blocks": 10,
+						"data": 118
+					}
+				]
+			},
+			{
+				"type":"28M",
+				"data_codewords":1193,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 3,
+						"data": 45
+					},
+					{
+						"blocks": 23,
+						"data": 46
+					}
+				]
+			},
+			{
+				"type":"28Q",
+				"data_codewords":871,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 24
+					},
+					{
+						"blocks": 31,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"28H",
+				"data_codewords":661,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 15
+					},
+					{
+						"blocks": 31,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"29L",
+				"data_codewords":1631,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 7,
+						"data": 116
+					},
+					{
+						"blocks": 7,
+						"data": 117
+					}
+				]
+			},
+			{
+				"type":"29M",
+				"data_codewords":1267,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 21,
+						"data": 45
+					},
+					{
+						"blocks": 7,
+						"data": 46
+					}
+				]
+			},
+			{
+				"type":"29Q",
+				"data_codewords":911,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 1,
+						"data": 23
+					},
+					{
+						"blocks": 37,
+						"data": 24
+					}
+				]
+			},
+			{
+				"type":"29H",
+				"data_codewords":701,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 19,
+						"data": 15
+					},
+					{
+						"blocks": 26,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"30L",
+				"data_codewords":1735,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 5,
+						"data": 115
+					},
+					{
+						"blocks": 10,
+						"data": 116
+					}
+				]
+			},
+			{
+				"type":"30M",
+				"data_codewords":1373,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 19,
+						"data": 47
+					},
+					{
+						"blocks": 10,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"30Q",
+				"data_codewords":985,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 15,
+						"data": 24
+					},
+					{
+						"blocks": 25,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"30H",
+				"data_codewords":745,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 23,
+						"data": 15
+					},
+					{
+						"blocks": 25,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"31L",
+				"data_codewords":1843,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 13,
+						"data": 115
+					},
+					{
+						"blocks": 3,
+						"data": 116
+					}
+				]
+			},
+			{
+				"type":"31M",
+				"data_codewords":1455,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 46
+					},
+					{
+						"blocks": 29,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"31Q",
+				"data_codewords":1033,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 42,
+						"data": 24
+					},
+					{
+						"blocks": 1,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"31H",
+				"data_codewords":793,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 23,
+						"data": 15
+					},
+					{
+						"blocks": 28,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"32L",
+				"data_codewords":1955,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 115
+					}
+				]
+			},
+			{
+				"type":"32M",
+				"data_codewords":1541,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 10,
+						"data": 46
+					},
+					{
+						"blocks": 23,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"32Q",
+				"data_codewords":1115,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 10,
+						"data": 24
+					},
+					{
+						"blocks": 35,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"32H",
+				"data_codewords":845,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 19,
+						"data": 15
+					},
+					{
+						"blocks": 35,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"33L",
+				"data_codewords":2071,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 115
+					},
+					{
+						"blocks": 1,
+						"data": 116
+					}
+				]
+			},
+			{
+				"type":"33M",
+				"data_codewords":1631,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 14,
+						"data": 46
+					},
+					{
+						"blocks": 21,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"33Q",
+				"data_codewords":1171,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 29,
+						"data": 24
+					},
+					{
+						"blocks": 19,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"33H",
+				"data_codewords":901,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 11,
+						"data": 15
+					},
+					{
+						"blocks": 46,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"34L",
+				"data_codewords":2191,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 13,
+						"data": 115
+					},
+					{
+						"blocks": 6,
+						"data": 116
+					}
+				]
+			},
+			{
+				"type":"34M",
+				"data_codewords":1725,
+				"ec_codewords_per_block":28,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 14,
+						"data": 46
+					},
+					{
+						"blocks": 23,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"34Q",
+				"data_codewords":1231,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 44,
+						"data": 24
+					},
+					{
+						"blocks": 7,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"34H",
+				"data_codewords":961,
+				"ec_codewords_per_block":30,
+				"remainder_bits": 3,
+				"groups": [
+					{
+						"blocks": 59,
+						"data": 16
+					},
+					{
+						"blocks": 1,
+						"data": 17
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"35L",
+				"data_codewords":2306,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 12,
+						"data": 121
+					},
+					{
+						"blocks": 7,
+						"data": 122
+					}
+				]
+			},
+			{
+				"type":"35M",
+				"data_codewords":1812,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 12,
+						"data": 47
+					},
+					{
+						"blocks": 26,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"35Q",
+				"data_codewords":1286,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 39,
+						"data": 24
+					},
+					{
+						"blocks": 14,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"35H",
+				"data_codewords":986,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 22,
+						"data": 15
+					},
+					{
+						"blocks": 41,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"36L",
+				"data_codewords":2434,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 121
+					},
+					{
+						"blocks": 14,
+						"data": 122
+					}
+				]
+			},
+			{
+				"type":"36M",
+				"data_codewords":1914,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 6,
+						"data": 47
+					},
+					{
+						"blocks": 34,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"36Q",
+				"data_codewords":1354,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 46,
+						"data": 24
+					},
+					{
+						"blocks": 10,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"36H",
+				"data_codewords":1054,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 2,
+						"data": 15
+					},
+					{
+						"blocks": 64,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"37L",
+				"data_codewords":2566,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 17,
+						"data": 122
+					},
+					{
+						"blocks": 4,
+						"data": 123
+					}
+				]
+			},
+			{
+				"type":"37M",
+				"data_codewords":1992,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 29,
+						"data": 46
+					},
+					{
+						"blocks": 14,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"37Q",
+				"data_codewords":1426,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 49,
+						"data": 24
+					},
+					{
+						"blocks": 10,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"37H",
+				"data_codewords":1096,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 24,
+						"data": 15
+					},
+					{
+						"blocks": 46,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"38L",
+				"data_codewords":2702,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 4,
+						"data": 122
+					},
+					{
+						"blocks": 18,
+						"data": 123
+					}
+				]
+			},
+			{
+				"type":"38M",
+				"data_codewords":2102,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 13,
+						"data": 46
+					},
+					{
+						"blocks": 32,
+						"data": 47
+					}
+				]
+			},
+			{
+				"type":"38Q",
+				"data_codewords":1502,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 48,
+						"data": 24
+					},
+					{
+						"blocks": 14,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"38H",
+				"data_codewords":1142,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 42,
+						"data": 15
+					},
+					{
+						"blocks": 32,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"39L",
+				"data_codewords":2812,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 20,
+						"data": 117
+					},
+					{
+						"blocks": 4,
+						"data": 118
+					}
+				]
+			},
+			{
+				"type":"39M",
+				"data_codewords":2216,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 40,
+						"data": 47
+					},
+					{
+						"blocks": 7,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"39Q",
+				"data_codewords":1582,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 43,
+						"data": 24
+					},
+					{
+						"blocks": 22,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"39H",
+				"data_codewords":1222,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 10,
+						"data": 15
+					},
+					{
+						"blocks": 67,
+						"data": 16
+					}
+				]
+			}
+		],
+		[
+			{
+				"type":"40L",
+				"data_codewords":2956,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 19,
+						"data": 118
+					},
+					{
+						"blocks": 6,
+						"data": 119
+					}
+				]
+			},
+			{
+				"type":"40M",
+				"data_codewords":2334,
+				"ec_codewords_per_block":28,
+				"groups": [
+					{
+						"blocks": 18,
+						"data": 47
+					},
+					{
+						"blocks": 31,
+						"data": 48
+					}
+				]
+			},
+			{
+				"type":"40Q",
+				"data_codewords":1666,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 34,
+						"data": 24
+					},
+					{
+						"blocks": 34,
+						"data": 25
+					}
+				]
+			},
+			{
+				"type":"40H",
+				"data_codewords":1276,
+				"ec_codewords_per_block":30,
+				"groups": [
+					{
+						"blocks": 20,
+						"data": 15
+					},
+					{
+						"blocks": 61,
+						"data": 16
 					}
 				]
 			}
