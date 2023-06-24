@@ -148,6 +148,8 @@ class QR{
 
 	alphanumericEncode(input){
 		let values = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
+		// Sanitize input
+		input = input.split("").filter(x=>values.indexOf(x)!==-1).join("")
 		let bitSeq = []
 		let mode = 0x2
 		let charCount = input.length
@@ -478,9 +480,9 @@ class QR{
 		return out
 	}
 
-	toSVG(){
+	toSVG(s = 15){
+		// s = scaling
 		let m = this.measure
-		let s = 15 // Scale factor
 		let d = (m+8)*s //Dimensions of whole svg, including whitespace
 		let out = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
 		out += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n'
