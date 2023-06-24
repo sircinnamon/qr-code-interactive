@@ -1,6 +1,7 @@
 let BitArr = require("./bitArray")
 let TwoDArray = require("./TwoDArray")
 let ReedSolomon = require("./reedSolomon")
+let QR_Scorer = require("./qr_scorer")
 let QR_CHARACTERISTICS = require("./qr_characteristics.json").characteristics
 
 class QR{
@@ -34,14 +35,14 @@ class QR{
 		// console.log(JSON.stringify(this.final_message))
 		// console.log(this.final_message.length)
 		this.placeData(this.final_message)
-		this.mask = this.chooseDataMask()
-		this.applyDataMask(this.mask.func)
-		this.formatString = this.generateFormatString()
-		this.placeFormatString()
 		if(this.version >= 7){
 			this.versionInfoString = this.lookupVersionInfoString()
 			this.placeVersionInfoString()
 		}
+		this.mask = this.chooseDataMask()
+		this.applyDataMask(this.mask.func)
+		this.formatString = this.generateFormatString()
+		this.placeFormatString()
 	}
 
 	addFinderPatterns(){
@@ -284,7 +285,6 @@ class QR{
 
 	placeData(message){
 		let location = 0
-		// console.log(message.length)
 		for(let i = 0; i< message.length; i++){
 			// console.log(`codeword ${i} = ${message[i]} - starts at ${location}(${this.dataLocationToXY(location)})`)
 			let codeword = message[i]
@@ -333,17 +333,30 @@ class QR{
 	}
 
 	chooseDataMask(){
-		// TODO: make this smarter
+		let scores = []
+		for (let i = 0; i < 8; i++) {
+			let module_copy = new TwoDArray(this.measure, this.measure, 0)
+			module_copy.copy(0,0,this.modules.data)
+			let mask = this.constructor.DATA_MASKS()[i]
+			let formatString = this.generateFormatString(mask.id)
+			this.placeFormatString(formatString, module_copy)
+			this.applyDataMask(mask.func, module_copy)
+			let score = QR_Scorer.score(module_copy)
+			// console.log(`Mask ${i} score ${score}`)
+			scores.push(score)
+		}
+		let winning_mask = scores.indexOf(Math.min(...scores))
 		return this.constructor.DATA_MASKS()[6]
 	}
 
-	applyDataMask(maskFunc){
+	applyDataMask(maskFunc, modules){
+		if(!modules){modules=this.modules}
 		for (let x = this.measure - 1; x >= 0; x--) {
 			for (let y = this.measure - 1; y >= 0; y--) {
 				if(!this.locked_modules.get(x,y)){
 					if(maskFunc(x,y)){
-						this.modules.set(x,y,
-							this.modules.get(x,y)?0:1
+						modules.set(x,y,
+							modules.get(x,y)?0:1
 						)
 					}
 				}
@@ -351,9 +364,9 @@ class QR{
 		}
 	}
 
-	generateFormatString(){
+	generateFormatString(mask_id){
 		let ec = "MLHQ".indexOf(this.ec_level)
-		let mask_id = this.mask.id
+		mask_id = mask_id!==undefined?mask_id:this.mask.id
 		let bitSeq = []
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(2, ec)]) // 2 bits, value ec
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(3, mask_id)])
@@ -397,8 +410,9 @@ class QR{
 		return this.constructor.FORMAT_STRINGS()[key]
 	}
 
-	placeFormatString(){
-		let fs = this.formatString
+	placeFormatString(fs, modules){
+		if(!modules){modules=this.modules}
+		if(!fs){fs=this.formatString}
 		let m = this.measure-1
 		let locations = [
 			[[0,8], [8,m]],
@@ -419,8 +433,8 @@ class QR{
 		]
 		for(let i=0; i<fs.length; i++){
 			let v = fs[i]-0
-			this.modules.set(locations[i][0][0],locations[i][0][1],v)
-			this.modules.set(locations[i][1][0],locations[i][1][1],v)
+			modules.set(locations[i][0][0],locations[i][0][1],v)
+			modules.set(locations[i][1][0],locations[i][1][1],v)
 		}
 	}
 

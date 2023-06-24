@@ -31,6 +31,10 @@ class TwoDArray {
 			}
 		}
 	}
+
+	toString(){
+		return this.data.map(row=>row.join("")).join("\n")
+	}
 }
 
 module.exports = TwoDArray
