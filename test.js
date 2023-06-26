@@ -4,6 +4,7 @@ let text = "CALL ME ISHMAEL. SOME YEARS AGO--NEVER MIND HOW LONG PRECISELY--HAVI
 
 
 console.log("============= TEST =============")
-qr_test = new QR(text.slice(0, 500), version=40, ec_level="H")
+qr_test = new QR(text.slice(0, 500), {version:40})
+qr_test = new QR("NOW I CAN MAKE QR CODES HA HA HA", {ec_level:"H"})
 // console.log(qr_test.toTerminalString())
 fs.writeFileSync("./svgs/test.svg", qr_test.toSVG(10))

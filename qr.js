@@ -5,11 +5,11 @@ let QR_Scorer = require("./qr_scorer")
 let QR_CHARACTERISTICS = require("./qr_characteristics.json").characteristics
 
 class QR{
-	constructor(input, version, ec_level="H"){
-		if(version){
-			this.set_version(version)
+	constructor(input, options={}){
+		if(options.version){
+			this.set_version(options.version)
 		}
-		this.ec_level = ec_level
+		this.ec_level = options.ec_level || "H"
 		this.input = input
 		this.build()
 	}

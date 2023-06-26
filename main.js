@@ -3,35 +3,35 @@ let BitArr = require("./bitArray")
 let QR = require("./qr.js")
 
 console.log("============= TEST =============")
-let qr_test = new QR("TEST", version=1)
+let qr_test = new QR("TEST")
 console.log(qr_test.toTerminalString())
 
 console.log("============= HELLO =============")
-let qr_hello = new QR("HELLO", version=1)
+let qr_hello = new QR("HELLO")
 console.log(qr_hello.toTerminalString())
 
 console.log("============= 123456789 =============")
-let qr_nums = new QR("123456789", version=2)
+let qr_nums = new QR("123456789", {version:2})
 // console.log(qr_nums.toTerminalString())
 
 console.log("============= VER 5 =============")
-let qr_med = new QR("THIS IS A VER 5 QR CODE WITH HIGHER CAPACITY", version=5)
+let qr_med = new QR("THIS IS A VER 5 QR CODE WITH HIGHER CAPACITY", {version:5})
 // console.log(qr_med.toTerminalString())
 
 console.log("============= VER 6 =============")
-let qr_six = new QR("THIS IS A SLIGHTLY LARGER QR CODE.", version=6)
+let qr_six = new QR("THIS IS A SLIGHTLY LARGER QR CODE.", {version:6})
 // console.log(qr_six.toTerminalString())
 
 console.log("============= VER 7 =============")
-let qr_long = new QR("THIS IS A LARGER QR CODE WITH HIGH CAPACITY AND VER INFO BLOCK. 66 CODEWORDS CAN DO 93 CHARS.", version=7)
+let qr_long = new QR("THIS IS A LARGER QR CODE WITH HIGH CAPACITY AND VER INFO BLOCK. 66 CODEWORDS CAN DO 93 CHARS.", {version:7})
 // console.log(qr_long.toTerminalString())
 
 console.log("============= NUMERIC =============")
-let qr_numeric = new QR(10101994, version=2)
+let qr_numeric = new QR(10101994, {version:2})
 // console.log(qr_numeric.toTerminalString())
 
 console.log("============= NUMERIC SMALL=============")
-let qr_numerics = new QR(5555, version=1)
+let qr_numerics = new QR(5555, {version:1})
 console.log(qr_numerics.toTerminalString())
 
 
