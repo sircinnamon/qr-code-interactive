@@ -15,6 +15,7 @@ class QR{
 	}
 
 	set_version(version){
+		// console.log("SETVER ",version)
 		this.version = version
 		this.measure = version * 4 + 17
 		this.modules = new TwoDArray(this.measure, this.measure, 0)
@@ -24,6 +25,7 @@ class QR{
 	process_data(){
 		this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
 		this.min_required_data_bits = this.calculateDatastreamLength()
+		// console.log("PREDICTED", this.min_required_data_bits)
 		let required_ver = this.constructor.REQUIRED_VERSION(this.min_required_data_bits, this.ec_level)
 		let flex_version = false
 		if(this.version < required_ver){
@@ -43,6 +45,7 @@ class QR{
 				throw new Error("Selected version will not fit data.")
 			}
 		}
+		// console.log("ACTUAL", BitArr.bitLength(this.encoded_content))
 		this.encoded_content = this.addTerminator(this.encoded_content, this.codeword_capacity())
 		this.codewords = this.convertBitStreamToCodewords(this.encoded_content)
 		this.encoded_padded_content = this.padCodewordToCapacity(this.codewords, this.codeword_capacity())
@@ -170,6 +173,7 @@ class QR{
 		if(this.data_mode == "numeric"){return this.numericEncode(data)}
 		if(this.data_mode == "alphanumeric"){return this.alphanumericEncode(data)}
 		if(this.data_mode == "bytes"){return this.bytesEncode(data)}
+		if(this.data_mode == "kanji"){return this.kanjiEncode(data)}
 	}
 
 	calculateDatastreamLength() {
@@ -177,6 +181,7 @@ class QR{
 		if(this.data_mode == "numeric"){return this.calculateNumericDatastreamLength((""+data).length)}
 		if(this.data_mode == "alphanumeric"){return this.calculateAlphanumericDatastreamLength(data.length)}
 		if(this.data_mode == "bytes"){return this.calculateBytesDatastreamLength(Buffer.from(data).length)}
+		if(this.data_mode == "kanji"){return this.calculateKanjiDatastreamLength(data.length)}
 	}
 
 	charCountBits() {
@@ -192,6 +197,11 @@ class QR{
 		}
 		if(this.data_mode == "bytes"){
 			if(this.version >= 27){return 16}
+			return 8
+		}
+		if(this.data_mode == "kanji"){
+			if(this.version >= 27){return 12}
+			if(this.version >= 10){return 10}
 			return 8
 		}
 	}
@@ -288,6 +298,45 @@ class QR{
 		for (let i = 0; i < input.length; i++) {
 			let block = input[i]
 			bitSeq = BitArr.concat(bitSeq, [BitArr.partial(8, block)])
+		}
+		return bitSeq
+	}
+
+	calculateKanjiDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=8){
+		// Mode indicator = 4 for QR, other for Mini
+		// Char count bitlen varies w/ mode + size (Table 3)
+		return mode_indicator_bitlen + char_count_bitlen + Math.ceil(dlen/2)*13
+	}
+
+	kanjiEncode(input){
+		// http://www.rikai.com/library/kanjitables/kanji_codes.sjis.shtml
+		let bitSeq = []
+		let mode = 0x8
+		let charCount = input.length/2 // Kanji stores as 2 bytes in SJIS
+		let charCountBits = this.charCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0001 (numeric)
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 10/12/14 bits, value = charCount
+		let r1 = [0x8140, 0x9FFC]
+		let r2 = [0xE040, 0xEBBF]
+		for (let i = 0; i < input.length-1; i+=2) {
+			let block = (input[i] << 8) + input[i+1]
+			if(block >= r1[0] && block <= r1[1]){
+				// mode 1
+				block = block - 0x8140
+				let block_hi = (block & 0xFF00) >> 8
+				let block_lo = block & 0x00FF
+				block_hi = block_hi * 0xC0
+				bitSeq = BitArr.concat(bitSeq, [BitArr.partial(13, block_hi+block_lo)])
+			} else if (block >= r2[0] && block <= r2[1]){
+				// mode 2
+				block = block - 0xC140
+				let block_hi = (block & 0xFF00) >> 8
+				let block_lo = block & 0x00FF
+				block_hi = block_hi * 0xC0
+				bitSeq = BitArr.concat(bitSeq, [BitArr.partial(13, block_hi+block_lo)])
+			} else {
+				throw new Error("Malformed kanji detected.")
+			}
 		}
 		return bitSeq
 	}
@@ -641,10 +690,29 @@ class QR{
 
 	static DETERMINE_DATA_MODE(data) {
 		// Support numeric, alphanumeric, bytes, kanji
+		let is_kanji = (buf)=>{
+			// Kanji must be a buffer already SHift_JIS encoded
+			let r1 = [0x8140, 0x9FFC]
+			let r2 = [0xE040, 0xEBBF]
+			for (let i = 0; i < buf.length; i+=2) {
+				let char = buf[i]<<8
+				char += buf[i+1]
+				if(char>=r1[0] && char<=r1[1]){
+					//do nothing
+				}
+				else if(char>=r2[0] && char<=r2[1]){
+					//do nothing
+				}
+				else {return false}
+			}
+			return true
+		}
 		if(typeof data === Number || (""+data).match(/^\d+$/g)){
 			return "numeric"
-		} else if (data.match(/^[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+\-./:]+$/g)){
+		} else if (typeof data === "string" && data.match(/^[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+\-./:]+$/g)){
 			return "alphanumeric"
+		} else if (Buffer.isBuffer(data) && is_kanji(data)){
+			return "kanji"
 		} else {
 			return "bytes"
 		}

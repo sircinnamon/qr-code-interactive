@@ -38,6 +38,14 @@ console.log("============= BYTES SMALL=============")
 let qr_bytes = new QR("sheep baa")
 console.log(qr_bytes.toTerminalString())
 
+console.log("============= KANJI SMALL=============")
+let data = Buffer.alloc(4)
+data.writeUInt16BE(0xE4AA)
+data.writeUInt16BE(0x89D7,2)
+// "茗荷" in Shift_JIS
+let qr_kanji = new QR(data)
+console.log(qr_kanji.toTerminalString())
+
 
 // console.log("============= EVERY VERSION/EC =============")
 // let text = "A SHORT GENERIC TEXT"
