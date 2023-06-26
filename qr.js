@@ -5,31 +5,60 @@ let QR_Scorer = require("./qr_scorer")
 let QR_CHARACTERISTICS = require("./qr_characteristics.json").characteristics
 
 class QR{
-	constructor(input, version = 1, ec_level="H"){
-		this.version = version
+	constructor(input, version, ec_level="H"){
+		if(version){
+			this.set_version(version)
+		}
 		this.ec_level = ec_level
-		this.measure = version * 4 + 17
-		this.modules = new TwoDArray(this.measure, this.measure, 0)
-		this.locked_modules = new TwoDArray(this.measure, this.measure, 0)
 		this.input = input
 		this.build()
 	}
 
-	build(){
+	set_version(version){
+		this.version = version
+		this.measure = version * 4 + 17
 		this.modules = new TwoDArray(this.measure, this.measure, 0)
 		this.locked_modules = new TwoDArray(this.measure, this.measure, 0)
-		this.addFinderPatterns()
-		this.addAlignmentPatterns(this.constructor.ALIGNMENT_PATTERN_LOCATIONS(version))
-		this.addTimingPatterns()
-		this.addDarkModule()
-		this.reserveMetadataLocations()
+	}
+
+	process_data(){
 		this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
+		this.min_required_data_bits = this.calculateDatastreamLength()
+		let required_ver = this.constructor.REQUIRED_VERSION(this.min_required_data_bits, this.ec_level)
+		let flex_version = false
+		if(this.version < required_ver){
+			throw new Error("Selected version will not fit data.")
+		} else if (!this.version) {
+			this.set_version(required_ver)
+			flex_version = true
+		}
 		this.encoded_content = this.encode(this.input)
+		let actual_required_version = this.constructor.REQUIRED_VERSION(BitArr.bitLength(this.encoded_content), this.ec_level)
+		if(this.version < actual_required_version){
+			if(flex_version){
+				// console.log("FLEX VERSION UP")
+				this.set_version(this.version+1)
+				this.encoded_content = this.encode(this.input)
+			} else {
+				throw new Error("Selected version will not fit data.")
+			}
+		}
 		this.encoded_content = this.addTerminator(this.encoded_content, this.codeword_capacity())
 		this.codewords = this.convertBitStreamToCodewords(this.encoded_content)
 		this.encoded_padded_content = this.padCodewordToCapacity(this.codewords, this.codeword_capacity())
 		//Split into groups for EC generation
 		this.data_groups = this.splitDataGroups()
+	}
+
+	build(){
+		this.process_data()
+		this.modules = new TwoDArray(this.measure, this.measure, 0)
+		this.locked_modules = new TwoDArray(this.measure, this.measure, 0)
+		this.addFinderPatterns()
+		this.addAlignmentPatterns(this.constructor.ALIGNMENT_PATTERN_LOCATIONS(this.version))
+		this.addTimingPatterns()
+		this.addDarkModule()
+		this.reserveMetadataLocations()
 		this.ec_codeword_groups = this.generateECC()
 		this.final_message = this.interleaveData(this.data_groups, this.ec_codeword_groups)
 		// console.log(JSON.stringify(this.final_message))
@@ -138,12 +167,71 @@ class QR{
 	}
 
 	encode(data) {
+		if(this.data_mode == "numeric"){return this.numericEncode(data)}
 		if(this.data_mode == "alphanumeric"){return this.alphanumericEncode(data)}
 	}
 
-	calculateAlphanumericDatastreamLength(dlen, mode_indicator_bitlen, char_count_bitlen){
+	calculateDatastreamLength() {
+		let data = this.input
+		if(this.data_mode == "numeric"){return this.calculateNumericDatastreamLength((""+data).length)}
+		if(this.data_mode == "alphanumeric"){return this.calculateAlphanumericDatastreamLength(data.length)}
+	}
+
+	charCountBits() {
+		if(this.data_mode == "numeric"){
+			if(this.version >= 27){return 14}
+			if(this.version >= 10){return 12}
+			return 10
+		}
+		if(this.data_mode == "alphanumeric"){
+			if(this.version >= 27){return 13}
+			if(this.version >= 10){return 11}
+			return 9
+		}
+	}
+
+	calculateNumericDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=10){
 		// Mode indicator = 4 for QR, other for Mini
 		// Char count bitlen varies w/ mode + size (Table 3)
+		let remainder_chars = dlen%3
+		let remainder = 0
+		if(remainder_chars===1){remainder = 4}
+		if(remainder_chars===2){remainder = 7}
+		return mode_indicator_bitlen + char_count_bitlen + 10*(Math.floor(dlen/3)) + remainder
+	}
+
+	numericEncode(input){
+		let values = "0123456789"
+		// Sanitize input
+		input = ""+input
+		input = input.split("").filter(x=>values.indexOf(x)!==-1).join("")
+		let bitSeq = []
+		let mode = 0x1
+		let charCount = input.length
+		let charCountBits = this.charCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0001 (numeric)
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 10/12/14 bits, value = charCount
+		input = input.match(/.{1,3}/g) // 3 char groups
+		for (let i = 0; i < input.length; i++) {
+			let block = input[i]
+			let val = block-0
+			if(block.length==1){
+				// 6 digit binary
+				bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, val)])
+			} else if(block.length==2){
+				// 6 digit binary
+				bitSeq = BitArr.concat(bitSeq, [BitArr.partial(7, val)])
+			} else {
+				// 3 digit num = 10 digit binary
+				bitSeq = BitArr.concat(bitSeq, [BitArr.partial(10, val)])
+			}
+		}
+		return bitSeq
+	}
+
+	calculateAlphanumericDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=9){
+		// Mode indicator = 4 for QR, other for Mini
+		// Char count bitlen varies w/ mode + size (Table 3) 9/11/13
 		return mode_indicator_bitlen + char_count_bitlen + 11*(Math.floor(dlen/2)) + 6*(dlen%2)
 	}
 
@@ -154,12 +242,9 @@ class QR{
 		let bitSeq = []
 		let mode = 0x2
 		let charCount = input.length
-		let charCountBits = 9
-		if(this.version >= 10){charCountBits=11}
-		if(this.version >= 27){charCountBits=13}
-		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, 2)]) // 4 bits, value = 0010 (alphanumeric)
+		let charCountBits = this.charCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0010 (alphanumeric)
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 9/11/13 bits, value = charCount
-		console.log(this.version, charCountBits, BitArr.bitLength(bitSeq))
 		input = input.match(/.{1,2}/g) // 2 char groups
 		for (let i = 0; i < input.length; i++) {
 			let block = input[i]
@@ -528,7 +613,24 @@ class QR{
 
 	static DETERMINE_DATA_MODE(data) {
 		// Support numeric, alphanumeric, bytes, kanji
-		return "alphanumeric"
+		if(typeof data === Number || (""+data).match(/^\d+$/g)){
+			return "numeric"
+		} else if (data.match(/^[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+\-./:]+$/g)){
+			return "alphanumeric"
+		} else {
+			return "bytes"
+		}
+	}
+
+	static REQUIRED_VERSION(bitLength, ecc) {
+		let data_codewords = Math.ceil(bitLength/8)
+		let ec_level = "LMQH".indexOf(ecc)
+		let possibles = QR.CHARACTERISTICS().map(x=>x[ec_level])
+		for (var i = 1; i < possibles.length; i++) {
+			if(possibles[i].data_codewords >= data_codewords){
+				return i
+			}
+		}
 	}
 
 	static FINDER_PATTERN(){

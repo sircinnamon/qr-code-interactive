@@ -12,29 +12,38 @@ console.log(qr_hello.toTerminalString())
 
 console.log("============= 123456789 =============")
 let qr_nums = new QR("123456789", version=2)
-console.log(qr_nums.toTerminalString())
+// console.log(qr_nums.toTerminalString())
 
 console.log("============= VER 5 =============")
 let qr_med = new QR("THIS IS A VER 5 QR CODE WITH HIGHER CAPACITY", version=5)
-console.log(qr_med.toTerminalString())
+// console.log(qr_med.toTerminalString())
 
 console.log("============= VER 6 =============")
 let qr_six = new QR("THIS IS A SLIGHTLY LARGER QR CODE.", version=6)
-console.log(qr_six.toTerminalString())
+// console.log(qr_six.toTerminalString())
 
 console.log("============= VER 7 =============")
 let qr_long = new QR("THIS IS A LARGER QR CODE WITH HIGH CAPACITY AND VER INFO BLOCK. 66 CODEWORDS CAN DO 93 CHARS.", version=7)
-console.log(qr_long.toTerminalString())
+// console.log(qr_long.toTerminalString())
 
-console.log("============= EVERY VERSION/EC =============")
-let text = "A SHORT GENERIC TEXT"
-for (let i = 1; i <= 40; i++) {
-	for (let j = 0; j < 4; j++) {
-		let ec = "LMQH"[j]
-		let ver = i
-		let qr = new QR(text, version=ver, ec_level=ec)
-	}
-}
+console.log("============= NUMERIC =============")
+let qr_numeric = new QR(10101994, version=2)
+// console.log(qr_numeric.toTerminalString())
+
+console.log("============= NUMERIC SMALL=============")
+let qr_numerics = new QR(5555, version=1)
+console.log(qr_numerics.toTerminalString())
+
+
+// console.log("============= EVERY VERSION/EC =============")
+// let text = "A SHORT GENERIC TEXT"
+// for (let i = 1; i <= 40; i++) {
+// 	for (let j = 0; j < 4; j++) {
+// 		let ec = "LMQH"[j]
+// 		let ver = i
+// 		let qr = new QR(text, version=ver, ec_level=ec)
+// 	}
+// }
 
 // let bitSeq = qr.alphanumericEncode("AC-42")
 // bitSeq = qr.addTerminator(bitSeq, 152)
