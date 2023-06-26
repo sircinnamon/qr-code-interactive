@@ -154,8 +154,12 @@ class QR{
 		let bitSeq = []
 		let mode = 0x2
 		let charCount = input.length
+		let charCountBits = 9
+		if(this.version >= 10){charCountBits=11}
+		if(this.version >= 27){charCountBits=13}
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, 2)]) // 4 bits, value = 0010 (alphanumeric)
-		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(9, charCount)]) // 9 bits, value = charCount
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 9/11/13 bits, value = charCount
+		console.log(this.version, charCountBits, BitArr.bitLength(bitSeq))
 		input = input.match(/.{1,2}/g) // 2 char groups
 		for (let i = 0; i < input.length; i++) {
 			let block = input[i]
