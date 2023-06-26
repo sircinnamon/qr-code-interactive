@@ -169,12 +169,14 @@ class QR{
 	encode(data) {
 		if(this.data_mode == "numeric"){return this.numericEncode(data)}
 		if(this.data_mode == "alphanumeric"){return this.alphanumericEncode(data)}
+		if(this.data_mode == "bytes"){return this.bytesEncode(data)}
 	}
 
 	calculateDatastreamLength() {
 		let data = this.input
 		if(this.data_mode == "numeric"){return this.calculateNumericDatastreamLength((""+data).length)}
 		if(this.data_mode == "alphanumeric"){return this.calculateAlphanumericDatastreamLength(data.length)}
+		if(this.data_mode == "bytes"){return this.calculateBytesDatastreamLength(Buffer.from(data).length)}
 	}
 
 	charCountBits() {
@@ -187,6 +189,10 @@ class QR{
 			if(this.version >= 27){return 13}
 			if(this.version >= 10){return 11}
 			return 9
+		}
+		if(this.data_mode == "bytes"){
+			if(this.version >= 27){return 16}
+			return 8
 		}
 	}
 
@@ -261,6 +267,28 @@ class QR{
 		}
 		// console.log(this.calculateAlphanumericDatastreamLength(charCount, 4, 9))
 		// console.log(bitArray.bitLength(bitSeq))
+		return bitSeq
+	}
+
+	calculateBytesDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=8){
+		// Mode indicator = 4 for QR, other for Mini
+		// Char count bitlen varies w/ mode + size (Table 3)
+		return mode_indicator_bitlen + char_count_bitlen + dlen*8
+	}
+
+	bytesEncode(input){
+		// Sanitize input
+		input = Buffer.from(input)
+		let bitSeq = []
+		let mode = 0x4
+		let charCount = input.length
+		let charCountBits = this.charCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0001 (numeric)
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 10/12/14 bits, value = charCount
+		for (let i = 0; i < input.length; i++) {
+			let block = input[i]
+			bitSeq = BitArr.concat(bitSeq, [BitArr.partial(8, block)])
+		}
 		return bitSeq
 	}
 

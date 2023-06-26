@@ -34,6 +34,10 @@ console.log("============= NUMERIC SMALL=============")
 let qr_numerics = new QR(5555, {version:1})
 console.log(qr_numerics.toTerminalString())
 
+console.log("============= BYTES SMALL=============")
+let qr_bytes = new QR("sheep baa")
+console.log(qr_bytes.toTerminalString())
+
 
 // console.log("============= EVERY VERSION/EC =============")
 // let text = "A SHORT GENERIC TEXT"
