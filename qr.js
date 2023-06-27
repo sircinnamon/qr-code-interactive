@@ -16,6 +16,8 @@ class QR{
 
 	set_version(version){
 		// console.log("SETVER ",version)
+		if(version < 1){version=1}
+		if(version > 40){version=40}
 		this.version = version
 		this.measure = version * 4 + 17
 		this.modules = new TwoDArray(this.measure, this.measure, 0)
@@ -35,6 +37,7 @@ class QR{
 			flex_version = true
 		}
 		this.encoded_content = this.encode(this.input)
+		// console.log("ACTUAL", BitArr.bitLength(this.encoded_content))
 		let actual_required_version = this.constructor.REQUIRED_VERSION(BitArr.bitLength(this.encoded_content), this.ec_level)
 		if(this.version < actual_required_version){
 			if(flex_version){
@@ -45,7 +48,6 @@ class QR{
 				throw new Error("Selected version will not fit data.")
 			}
 		}
-		// console.log("ACTUAL", BitArr.bitLength(this.encoded_content))
 		this.encoded_content = this.addTerminator(this.encoded_content, this.codeword_capacity())
 		this.codewords = this.convertBitStreamToCodewords(this.encoded_content)
 		this.encoded_padded_content = this.padCodewordToCapacity(this.codewords, this.codeword_capacity())
@@ -206,9 +208,30 @@ class QR{
 		}
 	}
 
-	calculateNumericDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=10){
+	modeCountBits() {
+		return 4 // All standard qr codes use 4
+	}
+
+	modeId() {
+		if(this.data_mode == "numeric"){
+			return 0x1
+		}
+		if(this.data_mode == "alphanumeric"){
+			return 0x2
+		}
+		if(this.data_mode == "bytes"){
+			return 0x4
+		}
+		if(this.data_mode == "kanji"){
+			return 0x8
+		}
+	}
+
+	calculateNumericDatastreamLength(dlen){
 		// Mode indicator = 4 for QR, other for Mini
 		// Char count bitlen varies w/ mode + size (Table 3)
+		let mode_indicator_bitlen = this.modeCountBits()
+		let char_count_bitlen = this.charCountBits()
 		let remainder_chars = dlen%3
 		let remainder = 0
 		if(remainder_chars===1){remainder = 4}
@@ -222,10 +245,13 @@ class QR{
 		input = ""+input
 		input = input.split("").filter(x=>values.indexOf(x)!==-1).join("")
 		let bitSeq = []
-		let mode = 0x1
+		let mode = this.modeId()
 		let charCount = input.length
 		let charCountBits = this.charCountBits()
-		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0001 (numeric)
+		let modeCountBits = this.modeCountBits()
+		if(modeCountBits){
+			bitSeq = BitArr.concat(bitSeq, [BitArr.partial(modeCountBits, mode)]) // 4 bits, value = 0001 (numeric)
+		}
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 10/12/14 bits, value = charCount
 		input = input.match(/.{1,3}/g) // 3 char groups
 		for (let i = 0; i < input.length; i++) {
@@ -245,9 +271,11 @@ class QR{
 		return bitSeq
 	}
 
-	calculateAlphanumericDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=9){
+	calculateAlphanumericDatastreamLength(dlen){
 		// Mode indicator = 4 for QR, other for Mini
 		// Char count bitlen varies w/ mode + size (Table 3) 9/11/13
+		let mode_indicator_bitlen = this.modeCountBits()
+		let char_count_bitlen = this.charCountBits()
 		return mode_indicator_bitlen + char_count_bitlen + 11*(Math.floor(dlen/2)) + 6*(dlen%2)
 	}
 
@@ -256,10 +284,11 @@ class QR{
 		// Sanitize input
 		input = input.split("").filter(x=>values.indexOf(x)!==-1).join("")
 		let bitSeq = []
-		let mode = 0x2
+		let mode = this.modeId()
 		let charCount = input.length
 		let charCountBits = this.charCountBits()
-		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0010 (alphanumeric)
+		let modeCountBits = this.modeCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(modeCountBits, mode)]) // 4 bits, value = 0010 (alphanumeric)
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 9/11/13 bits, value = charCount
 		input = input.match(/.{1,2}/g) // 2 char groups
 		for (let i = 0; i < input.length; i++) {
@@ -280,9 +309,11 @@ class QR{
 		return bitSeq
 	}
 
-	calculateBytesDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=8){
+	calculateBytesDatastreamLength(dlen){
 		// Mode indicator = 4 for QR, other for Mini
 		// Char count bitlen varies w/ mode + size (Table 3)
+		let mode_indicator_bitlen = this.modeCountBits()
+		let char_count_bitlen = this.charCountBits()
 		return mode_indicator_bitlen + char_count_bitlen + dlen*8
 	}
 
@@ -290,10 +321,11 @@ class QR{
 		// Sanitize input
 		input = Buffer.from(input)
 		let bitSeq = []
-		let mode = 0x4
+		let mode = this.modeId()
 		let charCount = input.length
 		let charCountBits = this.charCountBits()
-		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0001 (numeric)
+		let modeCountBits = this.modeCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(modeCountBits, mode)]) // 4 bits, value = 0001 (numeric)
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 10/12/14 bits, value = charCount
 		for (let i = 0; i < input.length; i++) {
 			let block = input[i]
@@ -302,19 +334,22 @@ class QR{
 		return bitSeq
 	}
 
-	calculateKanjiDatastreamLength(dlen, mode_indicator_bitlen=4, char_count_bitlen=8){
+	calculateKanjiDatastreamLength(dlen){
 		// Mode indicator = 4 for QR, other for Mini
 		// Char count bitlen varies w/ mode + size (Table 3)
+		let mode_indicator_bitlen = this.modeCountBits()
+		let char_count_bitlen = this.charCountBits()
 		return mode_indicator_bitlen + char_count_bitlen + Math.ceil(dlen/2)*13
 	}
 
 	kanjiEncode(input){
 		// http://www.rikai.com/library/kanjitables/kanji_codes.sjis.shtml
 		let bitSeq = []
-		let mode = 0x8
+		let mode = this.modeId()
 		let charCount = input.length/2 // Kanji stores as 2 bytes in SJIS
 		let charCountBits = this.charCountBits()
-		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(4, mode)]) // 4 bits, value = 0001 (numeric)
+		let modeCountBits = this.modeCountBits()
+		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(modeCountBits, mode)]) // 4 bits, value = 0001 (numeric)
 		bitSeq = BitArr.concat(bitSeq, [BitArr.partial(charCountBits, charCount)]) // 10/12/14 bits, value = charCount
 		let r1 = [0x8140, 0x9FFC]
 		let r2 = [0xE040, 0xEBBF]
@@ -512,7 +547,7 @@ class QR{
 			scores.push(score)
 		}
 		let winning_mask = scores.indexOf(Math.min(...scores))
-		return this.constructor.DATA_MASKS()[6]
+		return this.constructor.DATA_MASKS()[winning_mask]
 	}
 
 	applyDataMask(maskFunc, modules){

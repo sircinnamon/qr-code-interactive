@@ -1,0 +1,65 @@
+{
+	"characteristics": [
+		[],
+		[
+			{
+				"type":"M1",
+				"data_codewords": 2.5,
+				"ec_codewords_per_block": 2,
+				"remainder_bits": 0
+			},
+			{"data_codewords":0},
+			{"data_codewords":0}
+		],
+		[
+			{
+				"type":"M2L",
+				"data_codewords": 5,
+				"ec_codewords_per_block": 5,
+				"remainder_bits": 0
+			},
+			{
+				"type":"M2M",
+				"data_codewords": 4,
+				"ec_codewords_per_block": 6,
+				"remainder_bits":0
+			},
+			{"data_codewords":0}
+		],
+		[
+			{
+				"type":"M3L",
+				"data_codewords":10.5,
+				"ec_codewords_per_block":6,
+				"remainder_bits": 0
+			},
+			{
+				"type":"M3M",
+				"data_codewords":8.5,
+				"ec_codewords_per_block":8,
+				"remainder_bits": 0
+			},
+			{"data_codewords":0}
+		],
+		[
+			{
+				"type":"M4L",
+				"data_codewords":16,
+				"ec_codewords_per_block":8,
+				"remainder_bits": 0
+			},
+			{
+				"type":"M4M",
+				"data_codewords":14,
+				"ec_codewords_per_block":10,
+				"remainder_bits": 0
+			},
+			{
+				"type":"M4Q",
+				"data_codewords":10,
+				"ec_codewords_per_block":14,
+				"remainder_bits": 0
+			}
+		]
+	]
+}
