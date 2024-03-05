@@ -9,6 +9,15 @@ class QR{
 		if(options.version){
 			this.set_version(options.version)
 		}
+		// Unsafe options let you do "illegal" things which may cause
+		// QR codes to be unreadable, but useful for learning
+		this.unsafe_mask = undefined;
+		if(options.unsafe_mask !== undefined) {
+			if(!Object.keys(this.constructor.DATA_MASKS()).includes(""+options.unsafe_mask)){
+				throw new Error("Invalid 'unsafe_mask' argument: No such mask.")
+			}
+			this.unsafe_mask = options.unsafe_mask
+		}
 		this.ec_level = options.ec_level || "H"
 		this.input = input
 		this.build()
@@ -73,7 +82,13 @@ class QR{
 			this.versionInfoString = this.lookupVersionInfoString()
 			this.placeVersionInfoString()
 		}
-		this.mask = this.chooseDataMask()
+		
+		if(this.unsafe_mask!==undefined){
+			// console.log("UNSAFE MASK SET: ", this.unsafe_mask)
+			this.mask = this.constructor.DATA_MASKS()[this.unsafe_mask]
+		} else {
+			this.mask = this.chooseDataMask()
+		}
 		this.applyDataMask(this.mask.func)
 		this.formatString = this.generateFormatString()
 		this.placeFormatString()
@@ -468,6 +483,10 @@ class QR{
 			return [...data_codewords[0], ...ec_codewords[0]]
 		}
 		let interleavedDataCodewords = []
+		// Interleaving process: if a codeword is 8 bits
+		// take the 0th bit of each codeword, push all
+		// take the 1st bit of each codeword, push all
+		// ... up to 8 bits
 		for (let i = 0; i < data_codewords[data_codewords.length-1].length; i++) {
 			for(let j = 0; j < data_codewords.length; j++){
 				if(data_codewords[j][i]!==undefined){
