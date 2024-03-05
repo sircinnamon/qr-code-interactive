@@ -714,19 +714,22 @@ class QR{
 		return out
 	}
 
-	toSVG(s = 15){
+	toSVG(s = 15, bg="#FFF", fg="#000"){
 		// s = scaling
 		let m = this.measure
 		let d = (m+8)*s //Dimensions of whole svg, including whitespace
 		let out = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
 		out += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n'
 		out += `<svg width="${d}" height="${d}" viewBox="0 0 ${d} ${d}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n`
-		out += `\t<rect fill="#FFF" x="0" y="0" width="${d}" height="${d}" />\n`
+		out += `\t<defs>\n`
+		out += `\t\t<rect id="p" width="${s}" height="${s}" fill="${fg}"/>\n`
+		out += `\t</defs>\n`
+		out += `\t<rect fill="${bg}" x="0" y="0" width="${d}" height="${d}" />\n`
 		out += `\t<g>\n`
 		for(let y=0; y < this.modules.data.length; y++){
 			for(let x=0; x < this.modules.data[0].length; x++){
 				if(this.modules.data[y][x]){
-					out+=`\t\t<rect x="${(x+4)*s}" y="${(y+4)*s}" width="${s}" height="${s}" fill="#000"/>\n`					
+					out+=`\t\t<use href="#p" x="${(x+4)*s}" y="${(y+4)*s}" />\n`
 				}
 			}
 		}
