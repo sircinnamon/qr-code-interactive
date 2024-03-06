@@ -6,8 +6,11 @@ let QR_CHARACTERISTICS = require("./qr_characteristics.json").characteristics
 
 class QR{
 	constructor(input, options={}){
-		if(options.version){
+		if(options.version!==undefined){
 			this.set_version(options.version)
+		}
+		if(options.mode!==undefined){
+			this.data_mode = options.mode
 		}
 		// Unsafe options let you do "illegal" things which may cause
 		// QR codes to be unreadable, but useful for learning
@@ -34,7 +37,9 @@ class QR{
 	}
 
 	process_data(){
-		this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
+		if(this.data_mode === undefined){
+			this.data_mode = this.constructor.DETERMINE_DATA_MODE(this.input)
+		}
 		this.min_required_data_bits = this.calculateDatastreamLength()
 		// console.log("PREDICTED", this.min_required_data_bits)
 		let required_ver = this.constructor.REQUIRED_VERSION(this.min_required_data_bits, this.ec_level)
