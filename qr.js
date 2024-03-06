@@ -128,7 +128,7 @@ class QR{
 					this.modules.copy(centerx-2,centery-2,this.constructor.ALIGNMENT_PATTERN())
 					this.locked_modules.copy(centerx-2,centery-2,locked_map.data)
 				}
-			}	
+			}
 		}
 	}
 
@@ -789,6 +789,7 @@ class QR{
 				return i
 			}
 		}
+		throw new Error("Data will not fit in max size QR. Try lowering EC level.")
 	}
 
 	static FINDER_PATTERN(){
