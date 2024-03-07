@@ -104,6 +104,68 @@ describe("Basic QR Build", () => {
 			let qr = new QR(text.slice(0,40), {version: ver})
 			assert.equal(qr.modules.get(8, qr.modules.height-8), 1)
 		})
+		it("should have a correct Version Info string", () => {
+			let ver = 7
+			let expected_verinfo = "000111110010010100" // Change based on ver
+			let qr = new QR(text.slice(0,40), {version: ver})
+
+			let extracted_lower = ""
+			let extracted_upper = ""
+			let base = qr.measure - 11
+			for (let i = 0; i < 18; i++) {
+				let coord1 = Math.floor(i/3)
+				let coord2 = base + (i%3)
+				extracted_lower = qr.modules.get(coord1, coord2) + extracted_lower
+				extracted_upper = qr.modules.get(coord2, coord1) + extracted_upper
+			}
+			assert.equal(expected_verinfo, extracted_lower)
+			assert.equal(expected_verinfo, extracted_upper)
+		})
+		it("should have a correct format string", () => {
+			let ver = 8
+			// Change based on ver,data,mask, etc.
+			// See generate format string test
+			let expected_formatstring = "001100111010000"
+			let qr = new QR(text.slice(0,40), {version: ver})
+			let m = qr.measure-1
+			let extracted_tl = [
+				qr.modules.get(0, 8),
+				qr.modules.get(1, 8),
+				qr.modules.get(2, 8),
+				qr.modules.get(3, 8),
+				qr.modules.get(4, 8),
+				qr.modules.get(5, 8),
+				qr.modules.get(7, 8),
+				qr.modules.get(8, 8),
+				qr.modules.get(8, 7),
+				qr.modules.get(8, 5),
+				qr.modules.get(8, 4),
+				qr.modules.get(8, 3),
+				qr.modules.get(8, 2),
+				qr.modules.get(8, 1),
+				qr.modules.get(8, 0)
+			].join("")
+			let extracted_split = [
+				qr.modules.get(8,m),
+				qr.modules.get(8,m-1),
+				qr.modules.get(8,m-2),
+				qr.modules.get(8,m-3),
+				qr.modules.get(8,m-4),
+				qr.modules.get(8,m-5),
+				qr.modules.get(8,m-6),
+				qr.modules.get(m-7,8),
+				qr.modules.get(m-6,8),
+				qr.modules.get(m-5,8),
+				qr.modules.get(m-4,8),
+				qr.modules.get(m-3,8),
+				qr.modules.get(m-2,8),
+				qr.modules.get(m-1,8),
+				qr.modules.get(m,8)
+			].join("")
+
+			assert.equal(extracted_tl, expected_formatstring)
+			assert.equal(extracted_split, expected_formatstring)
+		})
 	})
 })
 // qr_test = new QR(text, {version:40})
