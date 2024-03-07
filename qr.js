@@ -892,7 +892,7 @@ class QR{
 
 	static DATA_MASKS(){
 		return {
-			"test" : {
+			"null" : {
 				func: (x, y) => {return 0},
 				id: 0
 			},
