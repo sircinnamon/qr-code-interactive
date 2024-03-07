@@ -26,6 +26,7 @@ describe("Basic QR Build", () => {
 			for(i=1;i<=40;i+=skip){
 				let qr = new QR(text.slice(10,0), {version: i})
 				let expected_measure = i * 4 + 17
+				assert.equal(qr.measure, expected_measure)
 				assert.equal(qr.modules.data[0].length, expected_measure)
 				assert.equal(qr.modules.height, expected_measure)
 				assert.equal(qr.modules.width, expected_measure)
@@ -104,6 +105,8 @@ describe("Basic QR Build", () => {
 			let qr = new QR(text.slice(0,40), {version: ver})
 			assert.equal(qr.modules.get(8, qr.modules.height-8), 1)
 		})
+	})
+	describe("Dynamic patterns", ()=>{
 		it("should have a correct Version Info string", () => {
 			let ver = 7
 			let expected_verinfo = "000111110010010100" // Change based on ver
@@ -168,6 +171,3 @@ describe("Basic QR Build", () => {
 		})
 	})
 })
-// qr_test = new QR(text, {version:40})
-// console.log(qr_test.toTerminalString())
-// fs.writeFileSync("./svgs/test.svg", qr_test.toSVG(10))
